@@ -1,0 +1,86 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+<style>
+    td {
+        border: solid 1px;
+        padding: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    table {
+        border-collapse: collapse;
+    }
+</style>
+
+<div id="app">
+    <table>
+    <tr>
+        <td>User</td>
+        <td>Current Title</td>
+        <td>Set Title</td>
+    </tr>
+    <tr v-for="user in users">
+        <td>{{ user._id }}</td>
+        <td>{{ user.title }}</td>
+        <td>
+            <select v-on:change="titlechanged(event)">
+                <option v-for="title in titles" :value="`${user._id}|${title}`" :selected="user.title === title">
+                     {{ title }}
+                </option>
+            </select>
+        </td>
+    </tr>
+    </table>
+</div>
+
+<script>
+    const data = {
+        users: [],
+        titles: ["", "ATCM", "ATIM", "ATGM"]
+    }
+
+    async function getUsers(){
+        const resp = await fetch("/users")
+        const json = await resp.json()
+
+        data.users = json
+
+        console.log("fetched", json)
+    }
+
+    var app = new Vue({
+        el: "#app",
+        data,
+        methods:{
+            titlechanged(ev){
+                const [user, title] = ev.target.value.split("|")
+
+                console.log("give title", title, "to user", user)
+
+                const params = {
+                    method:"POST",
+                    headers:{
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user,
+                        title
+                    })}
+
+                console.log("fetch", params)
+
+                fetch("/changetitle", params).then(resp => resp.json().then(json => {
+                    console.log(json)
+
+                    data.users.find(item => item._id === user).title = title
+                }))
+            }
+        }
+    });
+
+    document.title = `Liatomic Titles Manager`
+
+    getUsers()
+
+
+</script>

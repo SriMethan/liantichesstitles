@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const { MongoClient } = require("mongodb");
+const path = require("path");
 
 console.log(MONGODB_URI);
 
@@ -32,7 +34,7 @@ connect().then((result) => {
 
   const coll = db.collection("user");
 
-  app.get("/", (req, res) => {
+  app.get("/users", (req, res) => {
     coll
       .find(
         {},
@@ -42,6 +44,36 @@ connect().then((result) => {
       )
       .toArray()
       .then((result) => {
+        res.send(JSON.stringify(result));
+      });
+  });
+
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+  });
+
+  app.post("/changetitle", (req, res) => {
+    console.log(req.body);
+
+    const { user, title } = req.body;
+
+    coll
+      .updateOne(
+        {
+          _id: user,
+        },
+        {
+          $set: {
+            title: title,
+          },
+        },
+        {
+          upsert: true,
+        }
+      )
+      .then((result) => {
+        console.log(result);
+
         res.send(JSON.stringify(result));
       });
   });
