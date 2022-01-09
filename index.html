@@ -80,7 +80,11 @@
                 fetch("/changetitle", params).then(resp => resp.json().then(json => {
                     console.log(json)
 
-                    data.users.find(item => item._id === user).title = title
+                    if(json.error){
+                        window.alert(json.error)
+                    }else{
+                        data.users.find(item => item._id === user).title = title
+                    }
                 }))
             }
         }
