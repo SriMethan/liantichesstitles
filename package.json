@@ -1,10 +1,11 @@
 {
   "scripts": {
     "serve": "bash startserver.sh",
-    "pretty":"prettier -w server.js"
+    "pretty": "prettier -w server.js"
   },
   "dependencies": {
     "express": "^4.17.2",
+    "mongodb": "^4.3.0",
     "prettier": "^2.5.1"
   }
 }
