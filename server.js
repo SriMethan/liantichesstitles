@@ -3,6 +3,7 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
+const PASSWORD = process.env.PASSWORD || "password";
 const { MongoClient } = require("mongodb");
 const path = require("path");
 
@@ -59,27 +60,31 @@ connect().then((result) => {
   app.post("/changetitle", (req, res) => {
     console.log(req.body);
 
-    const { user, title } = req.body;
+    const { user, title, password } = req.body;
 
-    coll
-      .updateOne(
-        {
-          _id: user,
-        },
-        {
-          $set: {
-            title: title,
+    if (password !== PASSWORD) {
+      res.send(JSON.stringify({ error: "Not Authorized" }));
+    } else {
+      coll
+        .updateOne(
+          {
+            _id: user,
           },
-        },
-        {
-          upsert: true,
-        }
-      )
-      .then((result) => {
-        console.log(result);
+          {
+            $set: {
+              title: title,
+            },
+          },
+          {
+            upsert: true,
+          }
+        )
+        .then((result) => {
+          console.log(result);
 
-        res.send(JSON.stringify(result));
-      });
+          res.send(JSON.stringify(result));
+        });
+    }
   });
 
   app.listen(PORT, () => {

@@ -25,3 +25,7 @@ App is configured to run on Heroku, so just create an app and link the repo.
 ## MONGODB_URI
 
 MongoDb connect URI with credentials included.
+
+## PASSWORD
+
+Admin password.

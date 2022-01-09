@@ -13,6 +13,8 @@
 </style>
 
 <div id="app">
+    <button v-on:click="setpass">Set Password</button>
+    <hr>
     <table>
     <tr>
         <td>User</td>
@@ -52,6 +54,11 @@
         el: "#app",
         data,
         methods:{
+            setpass(){
+                const pass = window.prompt("Enter Server Password")
+
+                localStorage.setItem("PASSWORD", pass)
+            },
             titlechanged(ev){
                 const [user, title] = ev.target.value.split("|")
 
@@ -64,7 +71,8 @@
                     },
                     body: JSON.stringify({
                         user,
-                        title
+                        title,
+                        password: localStorage.getItem("PASSWORD")
                     })}
 
                 console.log("fetch", params)
