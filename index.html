@@ -2,13 +2,24 @@
 
 <style>
     td {
-        border: solid 1px;
-        padding: 5px;
+        border: solid 1px #00a;
+        padding: 3px;
         padding-left: 10px;
         padding-right: 10px;
+        font-family: monospace;
+        font-size: 16px;
     }
     table {
         border-collapse: collapse;
+    }
+    .title {
+        font-weight: bold;
+        color: #aa0;
+        text-align: center;
+    }
+    .settitle {
+        color: #070;
+        text-align: center;
     }
 </style>
 
@@ -18,15 +29,15 @@
     <table>
     <tr>
         <td>User</td>
-        <td>Current Title</td>
-        <td>Set Title</td>
+        <td class="title">Current Title</td>
+        <td class="settitle">Set Title</td>
     </tr>
     <tr v-for="user in users">
-        <td>{{ user._id }}</td>
-        <td>{{ user.title }}</td>
-        <td>
-            <select v-on:change="titlechanged(event)">
-                <option v-for="title in titles" :value="`${user._id}|${title}`" :selected="user.title === title">
+        <td><a :href="`https://lichess.org/@/${user._id}`" rel="noopener noreferrer" target="_blank">{{ user._id }}</a></td>
+        <td class="title">{{ user.title }}</td>
+        <td class="settitle">
+            <select class="settitle" v-on:change="titlechanged(event)">
+                <option class="settitle" v-for="title in titles" :value="`${user._id}|${title}`" :selected="user.title === title">
                      {{ title }}
                 </option>
             </select>
@@ -45,7 +56,7 @@
         const resp = await fetch("/users")
         const json = await resp.json()
 
-        data.users = json
+        data.users = json.sort((a,b)=>a._id.localeCompare(b._id))
 
         console.log("fetched", json)
     }
