@@ -21,10 +21,16 @@
         color: #070;
         text-align: center;
     }
+    .label {
+        font-family: monospace;
+        color: #007;
+    }
 </style>
 
 <div id="app">
     <button v-on:click="setpass">Set Password</button>
+    <span class="label">Search regex</span>
+    <input type="text" v-on:input="searchchanged">
     <hr>
     <table>
     <tr>
@@ -32,7 +38,7 @@
         <td class="title">Current Title</td>
         <td class="settitle">Set Title</td>
     </tr>
-    <tr v-for="user in users">
+    <tr v-for="user in filteredusers">
         <td><a :href="`https://lichess.org/@/${user._id}`" rel="noopener noreferrer" target="_blank">{{ user._id }}</a></td>
         <td class="title">{{ user.title }}</td>
         <td class="settitle">
@@ -49,7 +55,8 @@
 <script>
     const data = {
         users: [],
-        titles: ["", "ATPATZER", "AT1", "AT2", "AT3", "ATNM", "ATCM", "ATM", "ATIM", "ATGM", "ATSGM"]
+        titles: ["", "ATPATZER", "AT1", "AT2", "AT3", "ATNM", "ATCM", "ATM", "ATIM", "ATGM", "ATSGM"],
+        regex: new RegExp("")
     }
 
     async function getUsers(){
@@ -64,7 +71,15 @@
     var app = new Vue({
         el: "#app",
         data,
+        computed: {
+            filteredusers: ()=>data.users.filter(user=>user._id.match(data.regex))
+        },
         methods:{
+            searchchanged(ev){
+                const regex = new RegExp(ev.target.value, "i")
+
+                data.regex = regex
+            },
             setpass(){
                 const pass = window.prompt("Enter Server Password")
 
