@@ -1,6 +1,6 @@
-# liatomictitles
+# liantichesstitles
 
-Manage Liatomic titles for https://github.com/RaviharaV-bot/Liantichess .
+Manage Liantichess titles for [Liantichess](https://github.com/SriMethan/liantichess) .
 
 # Usage
 

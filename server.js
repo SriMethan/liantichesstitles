@@ -88,6 +88,6 @@ connect().then((result) => {
   });
 
   app.listen(PORT, () => {
-    console.log(`Liatomic titles listening at http://localhost:${PORT}`);
+    console.log(`Liantichess titles listening at http://localhost:${PORT}`);
   });
 });
