@@ -1,6 +1,7 @@
 {
   "scripts": {
     "serve": "bash startserver.sh",
+    "start": "node server.js",
     "pretty": "prettier -w server.js"
   },
   "dependencies": {
